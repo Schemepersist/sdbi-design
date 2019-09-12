@@ -1,2 +1,2 @@
-# srdb-plumbing
-Scheme Relational Database Interface DB Plumbing
+# srdbi-plumbing
+Scheme Relational Database Interface database plumbing
