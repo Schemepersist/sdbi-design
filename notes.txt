@@ -1,11 +1,67 @@
 Existing UNIX friendly general database interface libraries:
 
+ODBC: ANY SUPPORT BEYOND Linux, macOS, and Windows??
+
+ODBC database drivers: INVESTIGATE FOSS ONES!
+
+
+ODBC Driver Managers (do they include database drivers?):
+
+http://www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/WelcomeVisitors
+https://github.com/openlink/iODBC
+
+2 year gap between 3.52.12 and 13, later in July 2019.
+
+BSD and LGPL 2.0
+
+----
+
 http://www.unixodbc.org/
 https://sourceforge.net/projects/unixodbc/
 
 A somewhat healthy one man project, the oldest commit is in August
 2019.  But LGPL 2.0.
 
+Projects that use it:
+
+Asterisk PBX, for MySQL access.
+dynalogin: two-factor authentication, apparantly for all its persistence, last commit Jan 2017, https://github.com/dynalogin/dynalogin
+
+
+--------
+
+Common Lisp SQL (CLSQL) appears to have its own, also LGPL, last updated 2016
+http://git.kpe.io/?p=clsql.git;a=tree;f=db-odbc;h=d349c08686f215c56c1ae7f0eeb492215a3d55b9;hb=HEAD
+
+--------
+
+OpenDBX looks very dead.
+
+--------
+
+https://github.com/GNOME/libgda
+https://www.gnome-db.org/
+
+LGPL, spinoff of GNOME, not a lot of databases it supports:
+
+  at the moment supports SQLite (and SQLCipher), MySQL, PostgreSQL,
+  MSAccess, Berkeley Db (and is SQL extension), Oracle and JDBC
+  (allows access to any database through a JDBC driver), work is in
+  progress for other database types (such as Firebird). There is also
+  a special feature which allows one to connect to a database hidden
+  behind a web server (through specific PHP scripts)
+
+Or see https://github.com/GNOME/libgda/tree/master/providers which
+also has LDAP (MDB is Access I think).
+
+Really don't want to tie myself to *anything* from and currently
+supported by the GNOME Foundation.
+
+Enforces one type per column: https://wiki.gnome.org/ChooseLibgdaSQLite
+
+If John's concept is to be supported by databases other than SQLite,
+we'll have to create a kludge, but we don't want to force that for
+SQLite as well.
 
 ----------------
 
