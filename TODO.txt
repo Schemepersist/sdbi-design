@@ -1,3 +1,5 @@
 Find and examine ODBC and other generic database interfaces from
 Bionic Beaver's repositories.
 
+Investiage the sanity of a Korma port to Scheme, call it Kulcha.
+
