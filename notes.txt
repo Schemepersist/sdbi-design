@@ -1,0 +1,18 @@
+Existing UNIX friendly general database interface libraries:
+
+http://www.unixodbc.org/
+https://sourceforge.net/projects/unixodbc/
+
+A somewhat healthy one man project, the oldest commit is in August
+2019.  But LGPL 2.0.
+
+
+----------------
+
+User libraries/SRFIs that the Schemepersist stack below will support:
+
+John Cowan's Simple SQL
+
+A Scheme version of Clojure's Korma?
+
+
