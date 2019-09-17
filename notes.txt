@@ -1,32 +1,19 @@
-Existing UNIX friendly general database interface libraries:
+Adopt Perl's influential nomencalture for the low level plimbing:
 
-ODBC: ANY SUPPORT BEYOND Linux, macOS, and Windows??
+DBI database interface, what the programmer write to, does not know query languages or types/
 
-ODBC database drivers: INVESTIGATE FOSS ONES!
+DBD database driver, knows its particular database, is where column
+types are converted to and from Scheme dynamic types.
 
 
-ODBC Driver Managers (do they include database drivers?):
 
-http://www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/WelcomeVisitors
-https://github.com/openlink/iODBC
 
-2 year gap between 3.52.12 and 13, later in July 2019.
+----------------
 
-BSD and LGPL 2.0
+Existing UNIX friendly general database interface libraries for the
+plumbing/physical layer:
 
-----
-
-http://www.unixodbc.org/
-https://sourceforge.net/projects/unixodbc/
-
-A somewhat healthy one man project, the oldest commit is in August
-2019.  But LGPL 2.0.
-
-Projects that use it:
-
-Asterisk PBX, for MySQL access.
-dynalogin: two-factor authentication, apparantly for all its persistence, last commit Jan 2017, https://github.com/dynalogin/dynalogin
-
+ODBC: Legacy and thus $$
 
 --------
 
@@ -39,36 +26,118 @@ OpenDBX looks very dead.
 
 --------
 
-https://github.com/GNOME/libgda
-https://www.gnome-db.org/
+GNOME DB/libgda is hopelessly complicated and buggy, also LGPL, and typed
 
-LGPL, spinoff of GNOME, not a lot of databases it supports:
+--------
 
-  at the moment supports SQLite (and SQLCipher), MySQL, PostgreSQL,
-  MSAccess, Berkeley Db (and is SQL extension), Oracle and JDBC
-  (allows access to any database through a JDBC driver), work is in
-  progress for other database types (such as Firebird). There is also
-  a special feature which allows one to connect to a database hidden
-  behind a web server (through specific PHP scripts)
+http://libdbi.sourceforge.net/
+https://sourceforge.net/projects/libdbi/
+http://libdbi-drivers.sourceforge.net/
+https://sourceforge.net/projects/libdbi-drivers/
 
-Or see https://github.com/GNOME/libgda/tree/master/providers which
-also has LDAP (MDB is Access I think).
+libdbi no longer under development but very minimally supported, C,
+LGPL, and looks typed.  Claims its design is object oriented.  Claims
+it's used by Bacula, but half a decade later that's not true.
 
-Really don't want to tie myself to *anything* from and currently
-supported by the GNOME Foundation.
+Typing that you can apply to returned results is cramped, text and
+binary strings, imprecisely sized integers [BAD SMELL], floats and
+doubles, and "date/time".  Would require serialization.  But looks
+like you can apply dynamic typing on the fly.
 
-Enforces one type per column: https://wiki.gnome.org/ChooseLibgdaSQLite
+From the website, would be ~2013-4:
 
-If John's concept is to be supported by databases other than SQLite,
-we'll have to create a kludge, but we don't want to force that for
-SQLite as well.
+The drivers officially supported by libdbi are:
+
+MySQL
+PostgreSQL [ A PostgreSQL building patch was done March 2019. ]
+SQLite3
+
+The following drivers are in various stages of completion and are supposed to be included into the next release(tm):
+
+DB2
+Firebird/Interbase
+FreeTDS (provides access to MS SQL Server and Sybase)
+Ingres
+mSQL
+Oracle
+
+--------
+
+C++: CppDB, SOCI
+
+GPL only: libzdb, sells itself on connection pooling.
+
+Scheme libraries:
+
+guile dbi GPL only.
+
+Gerbil is object oriented like or worse than Gauche: https://github.com/vyzo/gerbil/tree/master/src/std/db
+
+sqlid.plt dead before bzlib/dbi below was developed, not part of Racket library set, LGPL.
+
+PLT bzlib/dbi based on Perl DBI dead, LGPL, was once popular but no longer part of Racket library set, retrieved.
 
 ----------------
+
+Package: dbconfig-common
+Architecture: all
+Version: 2.0.9
+Priority: optional
+Section: admin
+Origin: Ubuntu
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Original-Maintainer: Paul Gevers <elbrus@debian.org>
+Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+Installed-Size: 1545
+Depends: ucf, debconf (>= 0.5) | debconf-2.0
+Suggests: dbconfig-mysql | dbconfig-pgsql | dbconfig-sqlite | dbconfig-sqlite3 | dbconfig-no-thanks
+Breaks: bandwidthd-pgsql (<< 2.0.1+cvs20090917-9~)
+Filename: pool/main/d/dbconfig-common/dbconfig-common_2.0.9_all.deb
+Size: 600950
+MD5sum: a667111a3db0147f35b9b63de8cb8b32
+SHA1: db9e903b22d1d3f5904e3cf7d93ab25de3e35a21
+SHA256: 97abe87d724b2ca011d745b5fb95b87b226f2ac10fd6d9d6312c938ff562e6ef
+Description-en: framework that helps packages to manage databases
+ This package contains the core of the dbconfig-common framework. This
+ framework presents a policy and implementation for managing various databases
+ used by applications included in Debian packages.
+ .
+ It can:
+  - support MySQL/MariaDB, PostgreSQL, and SQLite based applications;
+  - create or remove databases and database users;
+  - access local or remote databases;
+  - upgrade/modify databases when upstream changes database structure;
+  - generate config files in many formats with the database info;
+  - import configs from packages previously managing databases on their own;
+  - prompt users with a set of normalized, pre-translated questions;
+  - handle failures gracefully, with an option to retry;
+  - do all the hard work automatically;
+  - work for package maintainers with little effort on their part;
+  - work for local admins with little effort on their part;
+  - comply with an agreed upon set of standards for behavior;
+  - do absolutely nothing if that is the whim of the local admin;
+  - perform all operations from within the standard flow of
+    package management (no additional skill is required of the local
+    admin).
+Description-md5: 3fa1997ed54b15c65dd46db7b40eb2f0
+Supported: 5y
+
+dbconfig-mysql - dbconfig-common MySQL/MariaDB support
+dbconfig-no-thanks - dbconfig-common bypass
+dbconfig-pgsql - dbconfig-common PostgreSQL support
+dbconfig-sqlite3 - dbconfig-common SQLite3 support
+dbconfig-sqlite - dbconfig-common SQLite support
+
+--------
+
+It's reported that SISC had a JDBC interface.
+
+--------
+
+
 
 User libraries/SRFIs that the Schemepersist stack below will support:
 
 John Cowan's Simple SQL
 
 A Scheme version of Clojure's Korma?
-
-
