@@ -1,12 +1,33 @@
 Adopt Perl's influential nomencalture for the low level plimbing:
 
-DBI database interface, what the programmer write to, does not know query languages or types/
+DBI database interface, what the programmer write to, does not know
+query languages or types.
 
 DBD database driver, knows its particular database, is where column
-types are converted to and from Scheme dynamic types.
+types are converted to and from Scheme dynamic types.  Has two layers,
+that and below it which is what talks to the database.
 
+----------------
 
+Rough sketch of DBI API:
 
+(sdbi-connect config [anti-injection-proc]) -> dbhand (database handle)
+
+(sdbi-disconnect dbhand)
+
+(sdbi-query
+
+(sdbi-cursor-magic
+
+(sdbi-update
+
+(sdbi-delete
+
+(sdbi-execute-literal string [some magic for returning rows or the like])
+
+transactions ... how to work in?
+
+how and where to pass through type conversion information for DBD top layer?
 
 ----------------
 
