@@ -55,6 +55,20 @@ Need general, generic pass throughs from DBI to both layers of the DBD.
 
 ----
 
+Type mapping regime:
+
+Hierarchy of type mappers, the first match going down wins:
+
+  User specified (perhaps even user supplied)
+  -
+  DBD database type layer supplied
+  -
+  standard in DBI
+
+TBD is how these mappers interact with the lowest level
+
+----
+
 transactions
 
 Example from Peter Bex, modified with a rollback procedure that does
