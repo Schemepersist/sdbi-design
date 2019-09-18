@@ -19,9 +19,10 @@ Rough sketch of DBI API:
 
 (sdbi-cursor-magic
 
-(sdbi-update
+(sdbi-execute ... for update, delete, DDL, maybe even works for -literal?  And query??
 
-(sdbi-delete
+It needs a general optional? config argument so the programmer can for
+example direct that it be prepared, or not depending on the default.
 
 (sdbi-execute-literal string [some magic for returning rows or the like])
 
