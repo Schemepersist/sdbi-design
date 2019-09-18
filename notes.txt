@@ -21,16 +21,37 @@ Rough sketch of DBI API:
 
 (sdbi-execute ... for update, delete, DDL, maybe even works for -literal?  And query??
 
-It needs a general optional? config argument so the programmer can for
-example direct that it be prepared, or not depending on the default.
+execute needs a general optional? config argument so the programmer
+can for example direct that it be prepared, or not depending on the
+default.
 
 (sdbi-execute-literal string [some magic for returning rows or the like])
-
-transactions ... how to work in clean and not ugly?
 
 how and where to pass through type conversion information for DBD top layer?
 
 Need general, generic pass throughs from DBI to both layers of the DBD.
+
+----
+
+transactions
+
+Example from Peter Bex, modified with a rollback procedure that does
+the proper exception or continuation magic under the table:
+
+(with-transaction db
+  (lambda ()
+    (query db "INSERT INTO foo (bar, qux) VALUES (1, 2)")
+
+    (with-transaction
+      (lambda ()
+        (query db "INSERT INTO foo (bar, qux) VALUES (3, 4)")
+        ;; Oops, decide to roll this back
+        (rollback)))
+
+    (query db "INSERT INTO foo (bar, qux) VALUES (5, 6)")))
+
+Rolling back two or more savepoint levels is probably worse than a
+80/20 case.
 
 ----------------
 
