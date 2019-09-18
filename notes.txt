@@ -11,9 +11,9 @@ that and below it which is what talks to the database.
 
 Rough sketch of DBI API:
 
-(sdbi-connect config [anti-injection-proc]) -> dbhand (database handle)
+(sdbi-connect config [anti-injection-proc]) -> conn
 
-(sdbi-disconnect dbhand)
+(sdbi-disconnect conn)
 
 (sdbi-query
 
@@ -25,9 +25,11 @@ Rough sketch of DBI API:
 
 (sdbi-execute-literal string [some magic for returning rows or the like])
 
-transactions ... how to work in?
+transactions ... how to work in clean and not ugly?
 
 how and where to pass through type conversion information for DBD top layer?
+
+Need general, generic pass throughs from DBI to both layers of the DBD.
 
 ----------------
 
