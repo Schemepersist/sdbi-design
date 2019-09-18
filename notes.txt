@@ -9,6 +9,28 @@ that and below it which is what talks to the database.
 
 ----------------
 
+The stack:
+
+  user code
+  -
+  maybe a framework
+  -
+  user-friendly procedures like in the PostgreSQL egg
+  -
+  DBI, knows interaction patterns e.g. connect, operations, transactions
+  -
+  DBD data mapper knows about the particular database's data types
+  -
+  DBD database interface knows the Scheme and interfacing to particular database
+  -
+  There might be a layer here to fan out to different connection methods
+  -
+  What John and Lassi are working on, or FFI, wire protocol, whatever
+  -
+  Database
+
+----------------
+
 Rough sketch of DBI API:
 
 (sdbi-connect config [anti-injection-proc]) -> conn
