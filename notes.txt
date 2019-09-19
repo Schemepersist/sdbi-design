@@ -53,6 +53,8 @@ how and where to pass through type conversion information for DBD top layer?
 
 Need general, generic pass throughs from DBI to both layers of the DBD.
 
+Include plugable connection pooling facility.
+
 ----
 
 Type mapping regime:
