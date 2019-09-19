@@ -1,7 +1,3 @@
-In addition to Cassandra, check out Apache HBase and Neo4j (graph).
-
-----------------
-
 See how widely SRFI 106 Basic socket interface has been implemented,
 it's used by the (postgresql) Snow library.  Chibi Scheme' (chibi net)
 hopefully does all the hard work.
@@ -123,6 +119,67 @@ decomposes URLs into those pairs. I wrote such a parser for Racket:
 
 The database URL syntax is an unruly wild west, but other kinds of
 connection strings are probably worse...
+
+----------------
+
+Cassandra and Neo4j both have their own query languages in the general
+mold of SQL.
+
+Cassandra from Wikipedia, CQL 3.0:
+
+CREATE KEYSPACE MyKeySpace
+  WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+
+USE MyKeySpace;
+
+CREATE COLUMNFAMILY MyColumns (id text, Last text, First text, PRIMARY KEY(id));
+
+INSERT INTO MyColumns (id, Last, First) VALUES ('1', 'Doe', 'John');
+
+SELECT * FROM MyColumns;
+
+Cassandra has a C/C++ library, https://github.com/datastax/cpp-driver
+
+----
+
+Neo4j
+
+Which they say
+https://neo4j.com/blog/gql-standard-query-language-property-graphs/
+had a great influence in the Graph Query Language (same standards
+level as SQL) in progress, first draft 20H2.  In the meanwhile:
+https://neo4j.com/docs/cypher-manual/current/introduction/
+
+MATCH (john {name: 'John'})-[:friend]->()-[:friend]->(fof)
+RETURN john.name, fof.name
+
+MATCH (user)-[:friend]->(follower)
+WHERE user.name IN ['Joe', 'John', 'Sara', 'Maria', 'Steve'] AND follower.name =~ 'S.*'
+RETURN user.name, follower.name
+
+https://neo4j.com/docs/cypher-manual/current/introduction/query-the-graph/
+
+MATCH (n {name: 'John'})-[:FRIEND]-(friend)
+WITH n, count(friend) AS friendsCount
+WHERE friendsCount > 3
+RETURN n, friendsCount
+
+Update:
+
+MATCH (n {name: 'John'})-[:FRIEND]-(friend)
+WITH n, count(friend) AS friendsCount
+SET n.friendsCount = friendsCount
+RETURN n.friendsCount
+
+(Maybe on a following page in the introduction:)
+
+CREATE (adam:User { name: 'Adam' }),(pernilla:User { name: 'Pernilla' }),(david:User { name: 'David'
+  }),
+  (adam)-[:FRIEND]->(pernilla),(pernilla)-[:FRIEND]->(david)
+
+Neo4j.com thinks a lot of this C client + driver:
+https://neo4j.com/developer/c/
+https://github.com/cleishm/libneo4j-client
 
 ----------------
 
