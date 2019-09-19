@@ -1,3 +1,9 @@
+See how widely SRFI 106 Basic socket interface has been implemented,
+it's used by the (postgresql) Snow library.  Chibi Scheme' (chibi net)
+hopefully does all the hard work.
+
+----------------
+
 Adopt Perl's influential nomencalture for the low level plimbing:
 
 DBI database interface, what the programmer write to, does not know
