@@ -97,6 +97,29 @@ the proper exception or continuation magic under the table:
 Rolling back two or more savepoint levels is probably worse than a
 80/20 case.
 
+----
+
+Lassi on connection parameters for opening database connections:
+
+I'd make it
+(open-sql-database ...) where ... is a plist of arbitrary key-value
+pairs. For example, I just implemented Postgres connect using its C
+library, and it accepts tons of options like that.
+
+The simplicity of a single "connection string" is enticing, but the real
+world is not that simple. Postgres has some legacy support to parse such
+a connection string, but I haven't dared look into what kinds of
+shenanigans go into it :)
+
+For a "connection string" I'd go with a DATABASE_URL environment
+variable as endorsed by 12factor. Our DB API doesn't have to worry about
+that; we can give key-value pairs to the DB and the DATABASE_URL library
+decomposes URLs into those pairs. I wrote such a parser for Racket:
+<https://github.com/lassik/racket-database-url/blob/master/database-url.rkt>.
+
+The database URL syntax is an unruly wild west, but other kinds of
+connection strings are probably worse...
+
 ----------------
 
 Existing UNIX friendly general database interface libraries for the
