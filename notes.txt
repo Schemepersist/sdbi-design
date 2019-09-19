@@ -61,6 +61,35 @@ Need general, generic pass throughs from DBI to both layers of the DBD.
 
 Include plugable connection pooling facility.
 
+Lassi: Is there value in altering the timeout while a connection is
+open? It would probably be more portable if the timeout is given once
+as an option to "open-sql-database". But if it's common to keep
+changing the timeout it may make sense to have this as well.
+
+----
+
+Errors:
+
+John, in response to my noting the "ORA-" prefix was particularly useful.
+
+It would be good to have a particular symbol naming each DB engine:
+oracle, postgresql, mysql, sqlite, etc. And that symbol would be tossed
+around in a lot of places, so library code could find out which DB it is
+using.
+
+It might be good to make the error an alist:
+
+((engine sqlite)
+  (native-error-symbol SQLITE_BUSY)
+  (native-error-code-integer 5)
+  (native-error-message "database is locked")
+  ...any other fields...)
+
+Obviously pick better names :)
+
+The DB driver could return as much data as it knows with each error.
+Callers can ignore the data they don't understand.
+
 ----
 
 Type mapping regime:
