@@ -1,3 +1,8 @@
+Have a "strict" type conversion mode so that e.g. a TIMESTAMP doesn't
+get automagically converted into a string?
+
+----------------
+
 Don't forget about star schema and OLAP.
 
 ----------------
