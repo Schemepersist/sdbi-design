@@ -1,3 +1,4 @@
+
 Have a "strict" type conversion mode so that e.g. a TIMESTAMP doesn't
 get automagically converted into a string?
 
@@ -218,6 +219,11 @@ CREATE (adam:User { name: 'Adam' }),(pernilla:User { name: 'Pernilla' }),(david:
 Neo4j.com thinks a lot of this C client + driver:
 https://neo4j.com/developer/c/
 https://github.com/cleishm/libneo4j-client
+
+----------------
+
+See also PostGIS using https://en.wikipedia.org/wiki/Simple_Features
+and extensions
 
 ----------------
 
