@@ -1,3 +1,10 @@
+Library namespacing:
+
+(sdbi dbi)
+
+(sdbi something? connector-type something? postgres[ql])
+
+----------------
 
 Have a "strict" type conversion mode so that e.g. a TIMESTAMP doesn't
 get automagically converted into a string?
