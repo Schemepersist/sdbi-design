@@ -1,2 +1,4 @@
-Investiage the sanity of a Korma port to Scheme, call it Kulcha.
+Add lastest copy of John's Simple SQL API
+
+Investigate the sanity of a Korma port to Scheme, call it Kulcha.
 
