@@ -1,0 +1,129 @@
+Subprocess interface specification
+==================================
+
+Early draft. Expect change.
+
+
+Rationale
+---------
+
+Database engines' native C APIs and socket protocols can be quite
+complex and liable to change. They are also different for each engine.
+Supporting those in a Scheme implementation can also make quite
+demanding use of that Scheme's foreign-function interface.
+
+A simpler connection method is to launch the database driver as a
+separate operating system process. Input and output pipes are opened
+from Scheme to that process, and Scheme can then talk to the database
+using a generic protocol shared by all drivers. Subprocesses can be
+opportunistically written in any language and can be easily supplied
+by third parties. They can also be re-used by languages other than
+Scheme, especially by other Lisp dialects.
+
+
+Process interface
+-----------------
+
+A database driver is an ordinary executable file for the host
+operating system. For example, on Windows it's an .exe file. On Unix
+it's a binary executable (ELF) or a script with a shebang line (`#!`)
+using any interpreter.
+
+Scheme launches the driver with no command line arguments. The program
+name (argv[0]) is undefined. The parent process is a process owned by
+the Scheme implementation (normally its only process). Standard file
+descriptors are as follows:
+
+* Standard input reads binary messages from Scheme.
+
+* Standard output writes binary messages to Scheme.
+
+* Standard error can be used in a last-ditch effort to write
+  human-readable error messages as UTF-8 text. It's undefined where
+  they end up, but if the driver is badly hosed, writing something
+  here is better than nothing.
+
+Standard input and standard output are normally pipes, but they may
+also be sockets. In principle, they may even be regular files.
+
+
+Messaging on stdin and stdout
+-----------------------------
+
+Standard input and output both use a binary encoding of S-expressions
+being developed by the Schemepersist project.
+
+The driver reads control messages from Scheme, one at a time. Each
+message is one S-expression. It must be a proper list whose first
+element is a symbol naming the command. Any and all remaining elements
+are arguments to the command.
+
+The driver responds to each command with one S-expression. It must be
+a proper list whose first element is one of the symbols 'ok or 'error.
+
+At most one command may be in progress at any given time. Scheme may
+wait arbitrarily long between commands, and before the first command.
+The subprocess should process and respond to each command as soon as
+it receives it, but this is not guaranteed either.
+
+
+Command language
+----------------
+
+(version)
+
+Returns version information about the underlying database as well as
+the subprocess driver.
+
+(open <parameters>)
+
+Connects to a database. <parameters> is an association list of the
+connection parameters. Each element is a (parameter . value) pair
+where both parameter and value are strings. The set of accepted
+parameters varies a lot between databases; see
+<https://connectionstrings.com/>.
+
+The "connect" command should normally be the first command sent by
+Scheme, as not many of the other ones work without a connection.
+
+(exec-sql <sql> <parameters>)
+
+Executes one parameterized SQL statement given in the string <sql>.
+The <parameters> argument gives a list of parameters that are
+substituted in the statement.
+
+(read-row)
+
+Reads one row of results from the last executed statement. This
+normally only works if the statement was a query.
+
+(close)
+
+Disconnect from the database (if connected) and exit the process. If
+everything goes well, the process exits with exit code 0.
+
+
+Errors
+------
+
+Once the driver has successfully performed a command on behalf of
+Scheme, it writes the list (ok <args...>) back to Scheme. The first
+element is the symbol 'ok and <args...> are zero or more arguments
+depending on which command succeeded.
+
+If there was an error performing a command, the driver writes back:
+
+(error <code> <message>)
+
+The <code> field gives one of the following symbols:
+
+* args -- The wrong number of arguments, or the wrong types or
+  formats, were given to a command by Scheme.
+
+* state -- Scheme is trying to run an command that is illogical given
+  the state of the subprocess. For example, execute a statement when a
+  database connection is not established.
+
+* database -- The database engine returned an error of some kind.
+
+The <message> field is a free-form error message string in English.
