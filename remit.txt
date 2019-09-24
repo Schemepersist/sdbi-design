@@ -1,0 +1,12 @@
+A R6RS and R7RS API for any database with a text query language that returns rectangular results.
+
+By rectangular results, we mean named columns with one or more rows, in SQL style, like this from the NeoJ4 graph database (https://neo4j.com/docs/cypher-manual/current/introduction/):
+
++----------------------+
+| john.name | fof.name |
++----------------------+
+| "John"    | "Maria"  |
+| "John"    | "Steve"  |
++----------------------+
+2 rows
+
