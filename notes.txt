@@ -21,14 +21,14 @@ hopefully does all the hard work.
 
 ----------------
 
-Adopt Perl's influential nomencalture for the low level plimbing:
+Adopt Perl's influential nomencalture for the low level plumbing:
 
 DBI database interface, what the programmer write to, does not know
-query languages or types.
+query languages.  Does know in some way connection pooling.
 
 DBD database driver, knows its particular database, is where column
-types are converted to and from Scheme dynamic types.  Has two layers,
-that and below it which is what talks to the database.
+types are converted to and from Scheme dynamic types.  Has at least
+two layers, that and below it which is what talks to the database.
 
 ----------------
 
@@ -54,23 +54,21 @@ The stack:
 
 ----------------
 
-Rough sketch of DBI API:
+Rough sketch of DBI API, prior to megering with John Cowan's Simple SQL API:
 
-(sdbi-connect config [anti-injection-proc]) -> conn
+(db-connect config [anti-injection-proc]) -> db
 
-(sdbi-disconnect conn)
+(db-disconnect db)
 
-(sdbi-query
-
-(sdbi-cursor-magic
-
-(sdbi-execute ... for update, delete, DDL, maybe even works for -literal?  And query??
+(db-execute
 
 execute needs a general optional? config argument so the programmer
-can for example direct that it be prepared, or not depending on the
+can for example direct that it be prepared, or not, depending on the
 default.
 
-(sdbi-execute-literal string [some magic for returning rows or the like])
+(db-cursor-magic
+
+executing literal strings should be handled by a "config" arg to db-execute
 
 how and where to pass through type conversion information for DBD top layer?
 
@@ -147,10 +145,11 @@ Rolling back two or more savepoint levels is probably worse than a
 
 Lassi on connection parameters for opening database connections:
 
-I'd make it
-(open-sql-database ...) where ... is a plist of arbitrary key-value
-pairs. For example, I just implemented Postgres connect using its C
-library, and it accepts tons of options like that.
+I'd make it (open-sql-database ...) where ... is a plist of arbitrary
+key-value pairs. For example, I just implemented Postgres connect
+using its C library, and it accepts tons of options like that.
+
+[ Since then it looks like alists are better. ]
 
 The simplicity of a single "connection string" is enticing, but the real
 world is not that simple. Postgres has some legacy support to parse such
@@ -234,75 +233,6 @@ and extensions
 
 ----------------
 
-Existing UNIX friendly general database interface libraries for the
-plumbing/physical layer:
-
-ODBC: Legacy and thus $$
-
---------
-
-Common Lisp SQL (CLSQL) appears to have its own, also LGPL, last updated 2016
-http://git.kpe.io/?p=clsql.git;a=tree;f=db-odbc;h=d349c08686f215c56c1ae7f0eeb492215a3d55b9;hb=HEAD
-
---------
-
-OpenDBX looks very dead.
-
---------
-
-GNOME DB/libgda is hopelessly complicated and buggy, also LGPL, and typed
-
---------
-
-http://libdbi.sourceforge.net/
-https://sourceforge.net/projects/libdbi/
-http://libdbi-drivers.sourceforge.net/
-https://sourceforge.net/projects/libdbi-drivers/
-
-libdbi no longer under development but very minimally supported, C,
-LGPL, and looks typed.  Claims its design is object oriented.  Claims
-it's used by Bacula, but half a decade later that's not true.
-
-Typing that you can apply to returned results is cramped, text and
-binary strings, imprecisely sized integers [BAD SMELL], floats and
-doubles, and "date/time".  Would require serialization.  But looks
-like you can apply dynamic typing on the fly.
-
-From the website, would be ~2013-4:
-
-The drivers officially supported by libdbi are:
-
-MySQL
-PostgreSQL [ A PostgreSQL building patch was done March 2019. ]
-SQLite3
-
-The following drivers are in various stages of completion and are supposed to be included into the next release(tm):
-
-DB2
-Firebird/Interbase
-FreeTDS (provides access to MS SQL Server and Sybase)
-Ingres
-mSQL
-Oracle
-
---------
-
-C++: CppDB, SOCI
-
-GPL only: libzdb, sells itself on connection pooling.
-
-Scheme libraries:
-
-guile dbi GPL only.
-
-Gerbil is object oriented like or worse than Gauche: https://github.com/vyzo/gerbil/tree/master/src/std/db
-
-sqlid.plt dead before bzlib/dbi below was developed, not part of Racket library set, LGPL.
-
-PLT bzlib/dbi based on Perl DBI dead, LGPL, was once popular but no longer part of Racket library set, retrieved.
-
-----------------
-
 Package: dbconfig-common
 Architecture: all
 Version: 2.0.9
@@ -358,10 +288,6 @@ It's reported that SISC had a JDBC interface.
 
 --------
 
-
-
 User libraries/SRFIs that the Schemepersist stack below will support:
 
-John Cowan's Simple SQL
-
-A Scheme version of Clojure's Korma?
+A Scheme version of Clojure's Korma???
