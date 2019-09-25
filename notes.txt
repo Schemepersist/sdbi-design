@@ -4,6 +4,8 @@ Library namespacing:
 
 (sdbi something? connector-type something? postgres[ql])
 
+(sdbi connector ffi sqlite3)
+
 ----------------
 
 Have a "strict" type conversion mode so that e.g. a TIMESTAMP doesn't
