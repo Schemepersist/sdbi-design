@@ -235,6 +235,47 @@ and extensions
 
 ----------------
 
+From: John Cowan <cowan@ccil.org>
+Date: Fri, 27 Sep 2019 11:13:27 -0400
+Message-ID: <CAD2gp_T25VmzdFWZoSkq9vJWFdwR8FRDmLsq8NJUmBuW=xZL_w@mail.gmail.com>
+Subject: Rectangularity run wild: the MariaDB storage engine CONNECT
+
+Since MariaDB's over the wire protocol is backward compatible with MySQL,
+it is part of our first-class support set.  And Maria (but not My) has a
+hidden treasure we can exploit: the CONNECT storage engine.  This is
+basically an engine for talking to sources of data other than classical
+base tables, such as are supported by MyISAM, Aria, InnoDB, etc.  Here are
+the sources it currently supports and rectangularizes:
+
+Fixed-length binary records
+CSV and friends
+dBase III/IV files (FoxBase etc.)
+Flat text files
+Filesystem directories (either hierarchical or non-hierarchical view)
+INI files
+JDBC
+JSON files (if the data is reasonably rectangular)
+MongoDB
+ODBC (including unixODBC)
+Column-oriented binary with one file per column (alpha)
+XML (if the data is reasonably rectangular)
+HTML tables
+Zipfile directories
+
+In some cases you have to use a CREATE TABLE to specify the
+rectangularization, in other cases not.  Some are updatable directly;
+others are updatable but destroy the original (updating XML gives something
+matching the rectangular view, not the original more complex view), yet
+others are read-only.  See
+<https://mariadb.com/kb/en/library/connect-table-types-overview/> for links
+to more detailed docs.
+
+There are also engines outside CONNECT that provide similar abilities:
+Cassandra, MyRocks, Object Query Graph.  See
+<https://mariadb.com/kb/en/library/storage-engines/> for links.
+
+----------------
+
 Package: dbconfig-common
 Architecture: all
 Version: 2.0.9
