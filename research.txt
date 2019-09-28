@@ -65,3 +65,88 @@ sqlid.plt dead before bzlib/dbi below was developed, not part of Racket library 
 
 PLT bzlib/dbi based on Perl DBI dead, LGPL, was once popular but no longer part of Racket library set, retrieved.
 
+----------------
+
+Neo4j
+
+Bottom Line: Neo4j is filled with "low grade fail", the sort that
+someone determined to really use it would power through without much
+difficultly (and likely less so if they're using Python etc. instead
+of C to progamatically query it), but that makes it undesirable for my
+odd use case of non-SQL query languages to make sure sdbi doesn't get
+too SQL specific.
+
+--------
+
+Which they say
+https://neo4j.com/blog/gql-standard-query-language-property-graphs/
+had a great influence in the Graph Query Language (same standards
+level as SQL) in progress, first draft 20H2.  In the meanwhile:
+https://neo4j.com/docs/cypher-manual/current/introduction/
+
+MATCH (john {name: 'John'})-[:friend]->()-[:friend]->(fof)
+RETURN john.name, fof.name
+
+MATCH (user)-[:friend]->(follower)
+WHERE user.name IN ['Joe', 'John', 'Sara', 'Maria', 'Steve'] AND follower.name =~ 'S.*'
+RETURN user.name, follower.name
+
+https://neo4j.com/docs/cypher-manual/current/introduction/query-the-graph/
+
+MATCH (n {name: 'John'})-[:FRIEND]-(friend)
+WITH n, count(friend) AS friendsCount
+WHERE friendsCount > 3
+RETURN n, friendsCount
+
+Update:
+
+MATCH (n {name: 'John'})-[:FRIEND]-(friend)
+WITH n, count(friend) AS friendsCount
+SET n.friendsCount = friendsCount
+RETURN n.friendsCount
+
+(Maybe on a following page in the introduction:)
+
+CREATE (adam:User { name: 'Adam' }),(pernilla:User { name: 'Pernilla' }),(david:User { name: 'David'
+  }),
+  (adam)-[:FRIEND]->(pernilla),(pernilla)-[:FRIEND]->(david)
+
+Neo4j.com thinks a lot of this C client + driver:
+https://neo4j.com/developer/c/
+https://github.com/cleishm/libneo4j-client
+
+--------
+
+It's Bolt wire protocol https://boltprotocol.org/ is "a
+non-standardized open source protocol" which is no longer maintained
+or apparantly tracking changes past Version 1, e.g.
+https://github.com/cleishm/libneo4j-client/issues/36 where the
+currently blessed by Neo4j C library author has to resort to reverese
+engineering to accomindate the changes, something he's not found it
+worth doing: https://github.com/cleishm/libneo4j-client/issues/36
+
+Per https://neo4j-drivers.github.io/, they're up to a v3 of the
+protocol, and a v4 for the version 4.0 of the database projected to be
+delivered by the end of 2019.
+
+--------
+
+The company provides https://github.com/neo4j-drivers/seabolt as an
+official "connector" vs. "driver" C library.  I suspect it's what they
+use for their fancy Python etc. drivers.  The latest 1.7 release of
+Seabolt is later than the current Neo4j 3.5.1.
+
+It won't completely build on Bionic Beaver, not the client, and not
+the documentation.  The Debian .deb installs just fine, but doesn't
+include documentation.  Which thanks to Python (3?) lossage and/or
+perhaps a make script error won't build from XML -> HTML.
+
+--------
+
+https://github.com/neo4j/neo4j/issues/12256#issuecomment-520333172
+
+chrisvest commented on Aug 12
+I'm told Ubuntu by default has a fairly strange build of openjdk, and that the plugin don't know how to cope with that. You could try installing Java from a more respectable vendor. For instance, Azul Zulu, AdoptOpenJDK, RedHat, or Oracle.
+
+----------------
+

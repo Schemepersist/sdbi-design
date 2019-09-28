@@ -187,47 +187,6 @@ SELECT * FROM MyColumns;
 
 Cassandra has a C/C++ library, https://github.com/datastax/cpp-driver
 
-----
-
-Neo4j
-
-Which they say
-https://neo4j.com/blog/gql-standard-query-language-property-graphs/
-had a great influence in the Graph Query Language (same standards
-level as SQL) in progress, first draft 20H2.  In the meanwhile:
-https://neo4j.com/docs/cypher-manual/current/introduction/
-
-MATCH (john {name: 'John'})-[:friend]->()-[:friend]->(fof)
-RETURN john.name, fof.name
-
-MATCH (user)-[:friend]->(follower)
-WHERE user.name IN ['Joe', 'John', 'Sara', 'Maria', 'Steve'] AND follower.name =~ 'S.*'
-RETURN user.name, follower.name
-
-https://neo4j.com/docs/cypher-manual/current/introduction/query-the-graph/
-
-MATCH (n {name: 'John'})-[:FRIEND]-(friend)
-WITH n, count(friend) AS friendsCount
-WHERE friendsCount > 3
-RETURN n, friendsCount
-
-Update:
-
-MATCH (n {name: 'John'})-[:FRIEND]-(friend)
-WITH n, count(friend) AS friendsCount
-SET n.friendsCount = friendsCount
-RETURN n.friendsCount
-
-(Maybe on a following page in the introduction:)
-
-CREATE (adam:User { name: 'Adam' }),(pernilla:User { name: 'Pernilla' }),(david:User { name: 'David'
-  }),
-  (adam)-[:FRIEND]->(pernilla),(pernilla)-[:FRIEND]->(david)
-
-Neo4j.com thinks a lot of this C client + driver:
-https://neo4j.com/developer/c/
-https://github.com/cleishm/libneo4j-client
-
 ----------------
 
 See also PostGIS using https://en.wikipedia.org/wiki/Simple_Features
