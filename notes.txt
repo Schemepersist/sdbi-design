@@ -1,3 +1,9 @@
+"generic-database" as a database type to provide minimal functionality
+for databases supported by e.g. JDBC for which no one has written a
+specific adapter.
+
+----------------
+
 Library namespacing:
 
 Only include things that are "always" there; JDBC is not one of them.
