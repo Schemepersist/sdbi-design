@@ -1,3 +1,19 @@
+Library namespacing:
+
+Only include things that are "always" there; JDBC is not one of them.
+
+(sdbi: obvious
+
+(sdbi connector: partitions namespace under sdbi
+
+(sdbi connector connector-type: will there never be more than one each
+net, ffi, or subprocess library??
+
+(sdbi connector ffi sqlite3): the last two are actually always a
+distint a pair.  And again, the only one? question.
+
+----------------
+
 Need to include mechanisms to dynamically communicate to levels below
 sdbi, perhaps MariaDB CONNECT can be told to load a particular CSV
 file on the fly.
@@ -17,16 +33,6 @@ that!" capability to warn or error when a user tries to do something
 that will only bring grief.
 
 This will include an optional strict mode for SQLite3.
-
-----------------
-
-Library namespacing:
-
-(sdbi dbi)
-
-(sdbi something? connector-type something? postgres[ql])
-
-(sdbi connector ffi sqlite3)
 
 ----------------
 
