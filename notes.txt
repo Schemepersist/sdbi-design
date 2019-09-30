@@ -45,6 +45,19 @@ unordered, unlike arrays.  Evil, evil!
 Decimal floats (SQL 2016 only).  IEEE, but I have no information on which
 of 32-bit, 64-bit, and 128-bit formats are supported.
 
+--------
+
+From: John Cowan <cowan@ccil.org>
+Date: Mon, 30 Sep 2019 18:44:41 -0400
+Message-ID: <CAD2gp_S0eJQKS6uh4=x+U5RBabe3ncHij6JUoKKXQcp+YxWncw@mail.gmail.com>
+Subject: Re: Constructing master lists of data types
+
+Looks like DB2 and Firebase support 64-bit (16-digit) and 28-bit (34-digit)
+decfloats.  I found a list of changes in SQL 2016, and that was the only
+one relevant to types.
+
+[...]
+
 ----------------
 
 "generic-database" as a database type to provide minimal functionality
