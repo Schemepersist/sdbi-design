@@ -263,6 +263,42 @@ Cassandra, MyRocks, Object Query Graph.  See
 
 ----------------
 
+From: John Cowan <cowan@ccil.org>
+Date: Mon, 30 Sep 2019 16:25:04 -0400
+Message-ID: <CAD2gp_S5a5Rwqe0vju=NOD81b8YU+sZeKCPabbcJu9YSvfzeJQ@mail.gmail.com>
+Subject: Re: sdbi design in detail and MariaDB CONNECT
+
+On Mon, Sep 30, 2019 at 12:28 PM Lassi Kortela <lassi@lassi.io> wrote:\
+
+[...]
+
+> Again if I understood John correctly, CONNECT takes normal SQL queries
+> and returns normal SQL results,
+
+More precisely, Connect allows you to say things like CREATE TABLE people
+ENGINE=connect TABLE_TYPE=csv FILE_NAME=people.csv.  Then the people table
+looks like an ordinary Maria table in the current database, and you can do
+ordinary SQL operations, including joining it with native tables or other
+Connect tables.  The people.csv file may or may not be cached inside
+Maria.  This is the same idea as SQLite virtual tables, though AFAIK there
+are no SQLite drivers available for external DBMSes, only for files,
+directories, etc.  (It's a pity that Connect does not support SQLite
+directly; it really should, though SQLite is accessible via Connect's ODBC
+table type.)
+
+In the JDBC case, we'd use CREATE TABLE people ENGINE=connect
+TABLE_TYPE=jdbc connection='jdbc:postgresql://host/mtr' dbname=public
+tabname=people option_list='User=mtr,Password=mtr' to connect to a
+PostgreSQL server on host.
+
+If the foreign table already exists, the Maria table is essentially a view
+over it.  However, it is also possible to CREATE TABLE when no foreign
+table exists, in which case it will be created (modulo permissions) and in
+that case you have to specify the column names, types, keys, indexes, etc.
+as you would for a native table.
+
+----------------
+
 Package: dbconfig-common
 Architecture: all
 Version: 2.0.9
