@@ -1,3 +1,9 @@
+Need to include mechanisms to dynamically communicate to levels below
+sdbi, perhaps MariaDB CONNECT can be told to load a particular CSV
+file on the fly.
+
+----------------
+
 MariaDB CONNECT:
 
 https://mariadb.com/kb/en/library/connect/
