@@ -2,6 +2,8 @@ For database column or whatever type quirks, we need a "don't do
 that!" capability to warn or error when a user tries to do something
 that will only bring grief.
 
+This will include an optional strict mode for SQLite3.
+
 ----------------
 
 Library namespacing:
