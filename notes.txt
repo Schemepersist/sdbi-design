@@ -1,3 +1,11 @@
+MariaDB CONNECT:
+
+https://mariadb.com/kb/en/library/connect/
+
+A general engine to connect non-SQL stuff while you speak SQL to it.
+
+----------------
+
 For database column or whatever type quirks, we need a "don't do
 that!" capability to warn or error when a user tries to do something
 that will only bring grief.
