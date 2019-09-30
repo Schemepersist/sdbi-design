@@ -1,3 +1,9 @@
+For database column or whatever type quirks, we need a "don't do
+that!" capability to warn or error when a user tries to do something
+that will only bring grief.
+
+----------------
+
 Library namespacing:
 
 (sdbi dbi)
