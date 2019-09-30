@@ -1,3 +1,52 @@
+From: John Cowan <cowan@ccil.org>
+Date: Mon, 30 Sep 2019 17:58:49 -0400
+Message-ID: <CAD2gp_SUsrcQfxYmz3wkk68bGrR8m6Kpywv7mpDWfkdBikOOJQ@mail.gmail.com>
+Subject: Re: Constructing master lists of data types
+
+[...] I found a couple of articles giving the standard data types of
+SQL 2011 and 2016.
+
+Strings can be fixed-length, variable-length, or unbounded size (CLOBs).
+You can specify a per-column character set and independently a collation
+order, but neither the available charsets and collations nor their names
+are portable.  There is a concept of NATIONAL CHAR vs plain CHAR types, but
+it is not even defined whether these are different encodings, never mind
+which encodings they are.
+
+Bytevectors also can be fixed-length, variable-length, or unbounded size
+(BLOBs).
+
+Exact numbers can be integers or fixed-point decimal fractions with a
+specified precision.  (These may be floats under the covers, as in SQLite).
+
+Inexact numbers can be IEEE binary32 or binary64.
+
+Booleans.
+
+Date/time types are DATE, TIME, and TIMESTAMP.  The last two can have a
+precision (fractional seconds).  All three can be with or without offsets
+from UTC.  I have a *lot* of opinions about this group.
+
+Time intervals are intervals of time with a start and an end.  They are not
+the same as ISO 8601 periods, which are unanchored amounts of time.
+
+Row types are used in SQL programming to represent the type of a single
+row.  They can't exist inside a table.
+
+Reference types are pointers to specific rows in specific tables.  Evil,
+evil, evil!
+
+Array types are for homogeneous arrays, a hack for getting around first
+normal form.  Evil, evil!
+
+Multiset types are another hack for getting around first normal form but
+unordered, unlike arrays.  Evil, evil!
+
+Decimal floats (SQL 2016 only).  IEEE, but I have no information on which
+of 32-bit, 64-bit, and 128-bit formats are supported.
+
+----------------
+
 "generic-database" as a database type to provide minimal functionality
 for databases supported by e.g. JDBC for which no one has written a
 specific adapter.
