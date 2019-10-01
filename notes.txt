@@ -15,6 +15,17 @@ distint a pair.  And again, the only one? question.
 (sdbi database postgresql): for a database's special sauce that
 doesn't change based on the connection method.
 
+What's beyond the named database is up to the library writer, e.g.:
+
+(sdbi database sqlite3 json1) to make that module available.
+
+For our internal use:
+
+(sdbi connector ffi sqlite3)
+
+(sdbi connector subprocess), but also somewhere a net variety to talk
+to a different system's database server.  Maybe ideally using its own
+wire protocol???
 
 ----------------
 
