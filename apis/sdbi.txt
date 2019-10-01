@@ -1,4 +1,4 @@
-(sdqi-stack-setup alist) -> tech-stack
+(sdqi-stack-construct alist) -> tech-stack
 
-(sdbi-stack-teardown tech-stack)
+(sdbi-stack-dismantle tech-stack)
 
