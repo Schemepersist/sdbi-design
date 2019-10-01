@@ -29,7 +29,7 @@ procedures to supply a different pooling system.
 (sdbi-tech-stack? obj) -> boolean
 
 
-(sdbi-connection-open alist) -> connection
+(sdbi-connection-open tech-stack alist) -> connection
 
 The connection is virtual if connection pooling is enabled by
 sdbi-stack-construct.
@@ -73,6 +73,12 @@ It is an error to mutate either the ~~~~string-to-be-named or
 bindings; this enables caching of either compiled but unbound
 statements, fully bound statements, or both.
 
+~~~~ what in the config-alist?  Is that really needed??
+
+~~~~ do we want (sdbi-statement-free statement)
+
+Frees any resouces associated with statement.
+
 (sdbi-statement? obj) -> boolean
 
 (sdbi-exec connection statement) -> implementation-dependent
@@ -84,7 +90,7 @@ Use this procedure when statement does not return a result set.
 Executes statement, and thunk supplied, passes it the result-set.
 
 
----------------- below unchanged except "sql-" -> "sdbi-"
+---------------- ~~~~ below unchanged except "sql-" -> "sdbi-"
 
 (sdbi-read result-set) -> list
 
