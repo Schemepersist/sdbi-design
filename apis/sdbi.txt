@@ -8,11 +8,11 @@ tech-stack, connection, statement, result-set
 
 Databases:
 
-(sdbi-stack-construct alist) -> tech-stack
+(db-stack-construct alist) -> tech-stack
 
-(sdbi-stack-dismantle tech-stack) -> undefined
+(db-stack-dismantle tech-stack) -> undefined
 
-(sdbi-stack-adjust tech-stack alist) -> undefined
+(db-stack-adjust tech-stack alist) -> undefined
 
 Options for -construct and -adjust include:
 
@@ -26,24 +26,24 @@ connection. Signal an error if request does not complete.
 Where variety is #t to use the stack's default pooling, or a list of
 procedures to supply a different pooling system.
 
-(sdbi-tech-stack? obj) -> boolean
+(db-tech-stack? obj) -> boolean
 
 
-(sdbi-connection-open tech-stack alist) -> connection
+(db-connection-open tech-stack alist) -> connection
 
 The connection is virtual if connection pooling is enabled by
-sdbi-stack-construct.
+db-stack-construct.
 
 The alist argument maps strings to strings, and is a Schemification of
 database conection strings. See connectionstrings.com for
 documentation on the formats for many databases and drivers.
 
-(sdbi-connection? obj) -> boolean
+(db-connection? obj) -> boolean
 
-(sdbi-connection-close connection) -> undefined
+(db-connection-close connection) -> undefined
 
 
-(sdbi-interrupt connection [some sort of time thing]) -> undefined
+(db-interrupt connection [some sort of time thing]) -> undefined
 
 Attempts to interrupt any requests currently in progress on
 connection. This must be called from a different thread than the
@@ -54,11 +54,11 @@ a delay specified by an interval?  Interrupt any time after a timespec
 in the future?
 
 
-(sdbi-with-transaction connection thunk) -> what thunk returns
+(db-with-transaction connection thunk) -> what thunk returns
 
-(sdbi-rollback connection) -> unspecified
+(db-rollback connection) -> unspecified
 
-(sdbi-in-transaction? connection) -> boolean
+(db-in-transaction? connection) -> boolean
 
 Is the connection currently running a transaction?
 
@@ -67,54 +67,56 @@ Statements and result sets
 
 ~~~~ See if -statement and -exec can and should should be combined:
 
-(sdbi-statement connection ~~~~string-to-be-named bindings [config-alist]) -> statement
+(db-statement connection ~~~~string-to-be-named bindings [config-alist]) -> statement
 
 It is an error to mutate either the ~~~~string-to-be-named or
 bindings; this enables caching of either compiled but unbound
 statements, fully bound statements, or both.
 
 config-alist could include for example do or don't prepare statement.
+Cassandra allows per statement options like consistency level,
+declared idempotentence,
 
-~~~~ do we want (sdbi-statement-free statement)
+(db-statement-free statement)
 
-Frees any resouces associated with statement.
+Frees any resouces associated with statement, required by e.g. Cassandra.
 
-(sdbi-statement? obj) -> boolean
+(db-statement? obj) -> boolean
 
-(sdbi-exec connection statement) -> implementation-dependent
+(db-exec connection statement) -> implementation-dependent
 
 Use this procedure when statement does not return a result set.
 
-(sdbi-get-result connection statement [thunk]) -> result-set or what thunk returns
+(db-get-result connection statement [thunk]) -> result-set or what thunk returns
 
 Executes statement, and thunk supplied, passes it the result-set.
 
 
----------------- ~~~~ below unchanged except "sql-" -> "sdbi-"
+---------------- ~~~~ below unchanged except "sql-" -> "db-"
 
-(sdbi-read result-set) -> list
+(db-read result-set) -> list
 
 Returns a list of Scheme objects representing the next available row
 of the result-set. NULL is represented by the symbol null.
 
-(sdbi-read-all result-set) -> list of lists
+(db-read-all result-set) -> list of lists
 
 Returns all available rows in this result-set.
 
-(sdbi-for-each proc result-set) -> unspecified
+(db-for-each proc result-set) -> unspecified
 
 Applies each result of result-set to proc for its side effects.
 
-(sdbi-map->list proc result-set) -> list
+(db-map->list proc result-set) -> list
 
 Applies each result of result-set to proc and returns a list of the results.
 
-(sdbi-fold proc knil result-set) -> any
+(db-fold proc knil result-set) -> any
 
 Call proc on each result of result-set and the current state
 (initially knil). Order of arguments?
 
-(sdbi-column-fold proc-list column-list knil-list result-set) -> any
+(db-column-fold proc-list column-list knil-list result-set) -> any
 
 Folds specified columns simultaneously, where column-list specifies
 the names of the columns of interest, proc-list is the folding procs
@@ -124,60 +126,65 @@ values of the current states of each fold.
 
 Blobs
 
-ISSUE: Should this be gotten rid of? It's not strictly necessary, but
-handling really large blobs without it will be messy. Ideally it
-should give us ports, but adding ports to a Scheme implementation is
-hard.
+ISSUE from John: Should this be gotten rid of? It's not strictly
+necessary, but handling really large blobs without it will be
+messy. Ideally it should give us ports, but adding ports to a Scheme
+implementation is hard.
 
-(sdbi-make-blob connection table column rowid length) -> blob
+ANSWER from John: I think that the blob API should be generalized to
+reading arrays and multisets somehow.  In both cases the idea is that
+the content of a cell (row-column pair) may be too large to just
+return all at once.
+
+(db-make-blob connection table column rowid length) -> blob
 
 Make a blob of length bytes, all of which are 0, in the specified
 location. The current position of the blob is set to 0. Blobs cannot
 be extended.
 
-(sdbi-open-blob connection table column rowid [old-blob]) -> blob
+(db-open-blob connection table column rowid [old-blob]) -> blob
 
 Open the blob at the specified location. The current position of the
 blob is set to 0. If old-blob is provided, it may be reused.
 
-(sdbi-blob? obj) -> boolean
+(db-blob? obj) -> boolean
 
-(sdbi-blob-read blob count) -> bytevector
+(db-blob-read blob count) -> bytevector
 
 Reads count bytes from the current position of blob into a newly
 allocated bytevector and returns it. Stops if the end of the blob is
 reached.
 
-(sdbi-blob-read! to at blob count) -> unspecified
+(db-blob-read! to at blob count) -> unspecified
 
 Reads into bytevector to starting at position at until count bytes are
 read or to is full, whichever comes first.
 
-(sdbi-blob-read-all blob) -> bytevector
+(db-blob-read-all blob) -> bytevector
 
-(sdbi-blob-write blob count bytevector [start end]) -> unspecified
+(db-blob-write blob count bytevector [start end]) -> unspecified
 
 Writes the bytes of bytevector from start (inclusive) to end
 (exclusive) at the current position of blob.
 
-(sdbi-blob-position blob) -> exact integer
+(db-blob-position blob) -> exact integer
 
-(sdbi-blob-set-position! blob position) -> unspecified
+(db-blob-set-position! blob position) -> unspecified
 
 
 Exceptions
 
 ~~~~ replace this with "systems error handing" SRFI exceptiones.
 
-(make-sdbi-exception code message) -> sdbi-exception
+(make-db-exception code message) -> db-exception
 
-(sdbi-exception? obj) -> boolean
+(db-exception? obj) -> boolean
 
-(sdbi-exception-code sdbi-exception) -> database type-dependent object
+(db-exception-code db-exception) -> database type-dependent object
 
-(sdbi-exception-message sdbi-exception) -> string
+(db-exception-message db-exception) -> string
 
-(sdbi-exception-connection sdbi-exception) -> connection
+(db-exception-connection db-exception) -> connection
 
 
 Meta
@@ -185,16 +192,16 @@ Meta
 This is not standardized over database types, so provided here. There
 isn't much, but what there is is generally useful.
 
-(sdbi-tables connection) -> list of symbols
+(db-tables connection) -> list of symbols
 
 The symbols correspond to database tables (including views) accessible
 to the current user.
 
-(sdbi-columns connection table) -> list of symbols
+(db-columns connection table) -> list of symbols
 
 The symbols represent column names, and appear in ordinal position.
 
-(sdbi-column-type db table column) -> string
+(db-column-type db table column) -> string
 
 Returns the declared type of the specified table and column. The
 result is a string whose possible values depend on the database
