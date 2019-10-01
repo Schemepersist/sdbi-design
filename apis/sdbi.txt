@@ -73,7 +73,7 @@ It is an error to mutate either the ~~~~string-to-be-named or
 bindings; this enables caching of either compiled but unbound
 statements, fully bound statements, or both.
 
-~~~~ what in the config-alist?  Is that really needed??
+config-alist could include for example do or don't prepare statement.
 
 ~~~~ do we want (sdbi-statement-free statement)
 
