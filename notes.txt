@@ -1,3 +1,22 @@
+Data typing through the lifecycle:
+
+Don't use a disjoint type due to all the hassle that brings.  Use a
+pair, inspired by timespecs, with:
+
+( information about the type . the current value )
+
+Eventually this becomes:
+
+( a specific database's type . value to be plugged into lowest level api )
+
+The car can be "generic" for general types like a string to go into a
+text field.
+
+They can be identified by the car of the pair.  Although, what to put
+in there?  Want fast dispatching once the Scheme type is identified.
+
+----------------
+
 Library namespacing:
 
 Only include things that are "always" there; JDBC is not one of them.
