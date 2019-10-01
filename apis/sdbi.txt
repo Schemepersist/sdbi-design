@@ -1,4 +1,198 @@
-(sdqi-stack-construct alist) -> tech-stack
+Many thanks to https://www.thesaurus.com!
 
-(sdbi-stack-dismantle tech-stack)
 
+Opaque object types:
+
+tech-stack, connection, statement, result-set
+
+
+Databases:
+
+(sdbi-stack-construct alist) -> tech-stack
+
+(sdbi-stack-dismantle tech-stack) -> undefined
+
+(sdbi-stack-adjust tech-stack alist) -> undefined
+
+Options for -construct and -adjust include:
+
+(request-timeout . timespect-interval)
+
+Set timeout in seconds and nanoseconds for each request on the
+connection. Signal an error if request does not complete.
+
+(connection-pooling . variety)
+
+Where variety is #t to use the stack's default pooling, or a list of
+procedures to supply a different pooling system.
+
+(sdbi-tech-stack? obj) -> boolean
+
+
+(sdbi-connection-open alist) -> connection
+
+The connection is virtual if connection pooling is enabled by
+sdbi-stack-construct.
+
+The alist argument maps strings to strings, and is a Schemification of
+database conection strings. See connectionstrings.com for
+documentation on the formats for many databases and drivers.
+
+(sdbi-connection? obj) -> boolean
+
+(sdbi-connection-close connection) -> undefined
+
+
+(sdbi-interrupt connection [some sort of time thing]) -> undefined
+
+Attempts to interrupt any requests currently in progress on
+connection. This must be called from a different thread than the
+requesting thread.
+
+~~~~ what should the optional argument be, and mean?  Interrupt after
+a delay specified by an interval?  Interrupt any time after a timespec
+in the future?
+
+
+(sdbi-with-transaction connection thunk) -> what thunk returns
+
+(sdbi-rollback connection) -> unspecified
+
+(sdbi-in-transaction? connection) -> boolean
+
+Is the connection currently running a transaction?
+
+
+Statements and result sets
+
+~~~~ See if -statement and -exec can and should should be combined:
+
+(sdbi-statement connection ~~~~string-to-be-named bindings [config-alist]) -> statement
+
+It is an error to mutate either the ~~~~string-to-be-named or
+bindings; this enables caching of either compiled but unbound
+statements, fully bound statements, or both.
+
+(sdbi-statement? obj) -> boolean
+
+(sdbi-exec connection statement) -> implementation-dependent
+
+Use this procedure when statement does not return a result set.
+
+(sdbi-get-result connection statement [thunk]) -> result-set or what thunk returns
+
+Executes statement, and thunk supplied, passes it the result-set.
+
+
+---------------- below unchanged except "sql-" -> "sdbi-"
+
+(sdbi-read result-set) -> list
+
+Returns a list of Scheme objects representing the next available row
+of the result-set. NULL is represented by the symbol null.
+
+(sdbi-read-all result-set) -> list of lists
+
+Returns all available rows in this result-set.
+
+(sdbi-for-each proc result-set) -> unspecified
+
+Applies each result of result-set to proc for its side effects.
+
+(sdbi-map->list proc result-set) -> list
+
+Applies each result of result-set to proc and returns a list of the results.
+
+(sdbi-fold proc knil result-set) -> any
+
+Call proc on each result of result-set and the current state
+(initially knil). Order of arguments?
+
+(sdbi-column-fold proc-list column-list knil-list result-set) -> any
+
+Folds specified columns simultaneously, where column-list specifies
+the names of the columns of interest, proc-list is the folding procs
+corresponding to the chosen columns, and knil-list is the initial
+values of the current states of each fold.
+
+
+Blobs
+
+ISSUE: Should this be gotten rid of? It's not strictly necessary, but
+handling really large blobs without it will be messy. Ideally it
+should give us ports, but adding ports to a Scheme implementation is
+hard.
+
+(sdbi-make-blob connection table column rowid length) -> blob
+
+Make a blob of length bytes, all of which are 0, in the specified
+location. The current position of the blob is set to 0. Blobs cannot
+be extended.
+
+(sdbi-open-blob connection table column rowid [old-blob]) -> blob
+
+Open the blob at the specified location. The current position of the
+blob is set to 0. If old-blob is provided, it may be reused.
+
+(sdbi-blob? obj) -> boolean
+
+(sdbi-blob-read blob count) -> bytevector
+
+Reads count bytes from the current position of blob into a newly
+allocated bytevector and returns it. Stops if the end of the blob is
+reached.
+
+(sdbi-blob-read! to at blob count) -> unspecified
+
+Reads into bytevector to starting at position at until count bytes are
+read or to is full, whichever comes first.
+
+(sdbi-blob-read-all blob) -> bytevector
+
+(sdbi-blob-write blob count bytevector [start end]) -> unspecified
+
+Writes the bytes of bytevector from start (inclusive) to end
+(exclusive) at the current position of blob.
+
+(sdbi-blob-position blob) -> exact integer
+
+(sdbi-blob-set-position! blob position) -> unspecified
+
+
+Exceptions
+
+~~~~ replace this with "systems error handing" SRFI exceptiones.
+
+(make-sdbi-exception code message) -> sdbi-exception
+
+(sdbi-exception? obj) -> boolean
+
+(sdbi-exception-code sdbi-exception) -> database type-dependent object
+
+(sdbi-exception-message sdbi-exception) -> string
+
+(sdbi-exception-connection sdbi-exception) -> connection
+
+
+Meta
+
+This is not standardized over database types, so provided here. There
+isn't much, but what there is is generally useful.
+
+(sdbi-tables connection) -> list of symbols
+
+The symbols correspond to database tables (including views) accessible
+to the current user.
+
+(sdbi-columns connection table) -> list of symbols
+
+The symbols represent column names, and appear in ordinal position.
+
+(sdbi-column-type db table column) -> string
+
+Returns the declared type of the specified table and column. The
+result is a string whose possible values depend on the database
+type. Note that in SQLite, because of its dynamic typing, it is not
+guaranteed that the Scheme type of objects stored in the column have
+the type specified by this procedure, or even that they all have the
+same Scheme type.
