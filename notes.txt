@@ -1,3 +1,23 @@
+Library namespacing:
+
+Only include things that are "always" there; JDBC is not one of them.
+
+(sdbi: obvious
+
+(sdbi connector: partitions namespace under sdbi
+
+(sdbi connector connector-type: will there never be more than one each
+net, ffi, or subprocess library??
+
+(sdbi connector ffi sqlite3): the last two are actually always a
+distint a pair.  And again, the only one? question.
+
+(sdbi database postgresql): for a database's special sauce that
+doesn't change based on the connection method.
+
+
+----------------
+
 From: John Cowan <cowan@ccil.org>
 Date: Mon, 30 Sep 2019 17:58:49 -0400
 Message-ID: <CAD2gp_SUsrcQfxYmz3wkk68bGrR8m6Kpywv7mpDWfkdBikOOJQ@mail.gmail.com>
@@ -63,22 +83,6 @@ one relevant to types.
 "generic-database" as a database type to provide minimal functionality
 for databases supported by e.g. JDBC for which no one has written a
 specific adapter.
-
-----------------
-
-Library namespacing:
-
-Only include things that are "always" there; JDBC is not one of them.
-
-(sdbi: obvious
-
-(sdbi connector: partitions namespace under sdbi
-
-(sdbi connector connector-type: will there never be more than one each
-net, ffi, or subprocess library??
-
-(sdbi connector ffi sqlite3): the last two are actually always a
-distint a pair.  And again, the only one? question.
 
 ----------------
 
