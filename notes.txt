@@ -1,3 +1,13 @@
+Logging facilities!
+
+What to be able to log, where and how, and how to let the user
+configure this?
+
+Looks like we'll want that syslog style and/or 12 factor app logging
+SRFI to do this.  See also the latest SRFI on hooks.
+
+----------------
+
 Data typing through the lifecycle:
 
 Don't use a disjoint type due to all the hassle that brings.  Use a
