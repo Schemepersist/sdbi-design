@@ -28,7 +28,7 @@ connection. Signal an error if request does not complete.
 (connection-pooling . variety)
 
 Where variety is #t to use the stack's default pooling, or a list of
-procedures to supply a different pooling system.
+procedures to supply a different pooling system, #f for none.
 
 (db-tech-stack? obj) -> boolean
 
