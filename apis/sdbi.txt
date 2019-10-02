@@ -1,6 +1,10 @@
 Many thanks to https://www.thesaurus.com!
 
 
+The Scheme Database Interface (sdbi) API supports databases with text
+query languages that supply rectangular AKA as tabular results.
+
+
 Opaque object types:
 
 tech-stack, connection, statement, result-set
