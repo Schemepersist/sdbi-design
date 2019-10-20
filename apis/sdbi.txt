@@ -7,16 +7,17 @@ query languages that supply rectangular AKA as tabular results.
 
 Opaque object types:
 
-tech-stack, connection, statement, result-set
+chain (of components that make up a "tech stack"), connection,
+statement, result-set
 
 
 Databases:
 
-(db-stack-construct alist) -> tech-stack
+(db-chain-construct alist) -> chain
 
-(db-stack-dismantle tech-stack) -> undefined
+(db-chain-dismantle chain) -> undefined
 
-(db-stack-adjust tech-stack alist) -> undefined
+(db-chain-adjust chain alist) -> undefined
 
 Options for -construct and -adjust include:
 
@@ -27,16 +28,16 @@ connection. Signal an error if request does not complete.
 
 (connection-pooling . variety)
 
-Where variety is #t to use the stack's default pooling, or a list of
+Where variety is #t to use the chain's default pooling, or a list of
 procedures to supply a different pooling system, #f for none.
 
-(db-tech-stack? obj) -> boolean
+(db-chain? obj) -> boolean
 
 
-(db-connection-open tech-stack alist) -> connection
+(db-connection-open chain alist) -> connection
 
 The connection is virtual if connection pooling is enabled by
-db-stack-construct.
+db-chain-construct.
 
 The alist argument maps strings to strings, and is a Schemification of
 database conection strings. See connectionstrings.com for
