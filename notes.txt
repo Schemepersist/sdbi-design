@@ -1,3 +1,8 @@
+parameter-binding-string is probably not an argument to
+db-chain-construct, instead an inherant property of a database.
+
+----------------
+
 Logging facilities!
 
 What to be able to log, where and how, and how to let the user
