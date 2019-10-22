@@ -1,3 +1,12 @@
+As much as I'd like to dynamically load the right libraries for
+whatever's handed to db-chain-construct, at minimum it would require
+keeping our own parallel pathname implementation, poorly duplicating
+what the Scheme implementation does.  Might as well use the native
+library facilities, where the duplication is in your face in the
+import at the top of a file.
+
+----------------
+
 parameter-binding-string is probably not an argument to
 db-chain-construct, instead an inherant property of a database.
 
