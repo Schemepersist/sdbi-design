@@ -1,3 +1,30 @@
+What about doing the subprocess approach *without* recourse to a
+Scheme's FFI or subprocess facility?  Should not depend on FIFOs or
+other POSIX magic, why not have the "subprocess" process exec the
+Scheme, thus getting access to its stdin, stdout, and stderror.
+
+----------------
+
+subprocess is functionally equilivent to JDBC as a connector, i.e.:
+
+(db-construct-chain '((connector . subprocess)
+                      (connector[-args?] . driver-sqlite) ??
+                      (database . sqlite3)))
+
+driver-sqlite might be a string, and in sdbi terms the executable
+might be named something like "subprocess-sqlite-ffi-driver".
+
+Also brings up an interesting question for that last alist, a bunch of
+SQLite3 "quirks" like its data/time handling are implemented as C
+functions.  If you're using the subprocess scheme because you're not
+exercising your FFI/system interface very much or at all....
+
+In the former case, you might have a choice, SQLite3 functions in
+process or in the subprocess.  In the latter, which is more likely,
+you'd only support subprocess access to the functions.
+
+----------------
+
 As much as I'd like to dynamically load the right libraries for
 whatever's handed to db-chain-construct, at minimum it would require
 keeping our own parallel pathname implementation, poorly duplicating
