@@ -15,6 +15,9 @@ Databases:
 
 (db-chain-construct alist) -> chain
 
+For any given database, altering the chain to get to it should not
+change the following code in any way.
+
 (db-chain-dismantle chain) -> undefined
 
 (db-chain-adjust chain alist) -> undefined
