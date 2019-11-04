@@ -23,9 +23,11 @@ Scheme, thus getting access to its stdin, stdout, and stderror.
 
 subprocess is functionally equilivent to JDBC as a connector, i.e.:
 
-(db-construct-chain '((connector . subprocess)
-                      (connector[-args?] . driver-sqlite) ??
-                      (database . sqlite3)))
+(db-construct-chain '((connector . (subprocess-init-proc "driver-sqlite"))
+                      (database . sqlite3-init-proc)))
+
+Note arguments to a connector turn the value into a list with them
+following the connector.
 
 driver-sqlite might be a string, and in sdbi terms the executable
 might be named something like "subprocess-sqlite-ffi-driver".
