@@ -1,3 +1,8 @@
+Either the chain alist should have a threading option, or that should
+be an optional argument to the connector.
+
+----------------
+
 Have the values of chain alist connector and database be whatever the
 name is with "-init-proc" appened to it (ugly, but can be changed
 later if need be).
