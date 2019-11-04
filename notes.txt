@@ -1,3 +1,14 @@
+Have the values of chain alist connector and database be whatever the
+name is with "-init-proc" appened to it (ugly, but can be changed
+later if need be).
+
+The remit of the connector is *all* functionality that's not pure
+Scheme, including helper C functions like SQLite3's date-time to and
+from text ones.  The database functionality is required to be pure
+Scheme, no FFIs whatsoever.
+
+----------------
+
 What about doing the subprocess approach *without* recourse to a
 Scheme's FFI or subprocess facility?  Should not depend on FIFOs or
 other POSIX magic, why not have the "subprocess" process exec the
