@@ -1,6 +1,7 @@
 In a certain sense of the ordering of a chain, it should be something
-like scheme-ffi-sqlite3, with the leading "scheme-" assumed.  But
-people care first about the database, then the connection method.
+like scheme-ffi-sqlite3, with the leading "scheme-" assumed.  The
+"ffi" or "net" is how you get to the database, logically coming first.
+But people care first about the database, then the connection method.
 Will this cause problems for multi-level connectors??
 
 ----------------
