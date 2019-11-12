@@ -1,3 +1,10 @@
+In a certain sense of the ordering of a chain, it should be something
+like scheme-ffi-sqlite3, with the leading "scheme-" assumed.  But
+people care first about the database, then the connection method.
+Will this cause problems for multi-level connectors??
+
+----------------
+
 Either the chain alist should have a threading option, or that should
 be an optional argument to the connector.
 
