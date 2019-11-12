@@ -12,6 +12,9 @@ Scheme, including helper C functions like SQLite3's date-time to and
 from text ones.  The database functionality is required to be pure
 Scheme, no FFIs whatsoever.
 
+~~~~ This does not allow for using two connectors for the same
+database, without renaming the imports.
+
 ----------------
 
 What about doing the subprocess approach *without* recourse to a
