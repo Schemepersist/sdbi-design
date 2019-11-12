@@ -26,6 +26,10 @@ database, without renaming the imports.
 For multi-level connectors an additional library will have to be
 imported, e.g. subprocess-sqlite3 to get the non-Scheme stuff.
 
+It would follow the current pattern if both were obtained by importing
+sqlite3-subprocess, but that duplicates subprocess imports if more
+than one is used to get to two different varieties of databases.
+
 ~~~~ This is getting into magical recipe to set up territory.
 
 ----------------
