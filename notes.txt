@@ -22,6 +22,11 @@ Scheme, no FFIs whatsoever.
 ~~~~ This does not allow for using two connectors for the same
 database, without renaming the imports.
 
+For multi-level connectors an additional library will have to be
+imported, e.g. subprocess-sqlite3 to get the non-Scheme stuff.
+
+~~~~ This is getting into magical recipe to set up territory.
+
 ----------------
 
 What about doing the subprocess approach *without* recourse to a
