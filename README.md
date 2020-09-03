@@ -9,7 +9,7 @@ commands/prepare statements, and how to navigate result sets".
 
 ## Remit:
 
-- Can supporting all databases with a text query language that return
+- Can support all databases with a text query language that return
   rectangular results.
 
 - Hiding the concept of preparing statements
